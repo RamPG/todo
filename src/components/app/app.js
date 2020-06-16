@@ -8,12 +8,23 @@ import ItemStatusFilter from "../item-status-filter";
 import './app.css';
 
 export default class App extends React.Component {
-    render() {
-        const todoData = [
+    state = {
+        todoData: [
             {label: 'Drink Coffee', important: false, id: 1},
             {label: 'Make Awesome App', important: true, id: 2},
             {label: 'Have a lunch', important: false, id: 3}
-        ];
+        ]
+    }
+    deleteElement = (id) => {
+        const newTodo = this.state.todoData.filter((item) => item.id !== id)
+        this.setState(() => {
+            return {
+                todoData: newTodo
+            }
+        })
+    }
+
+    render() {
 
         return (
             <div className="todo-app">
@@ -23,7 +34,10 @@ export default class App extends React.Component {
                     <ItemStatusFilter/>
                 </div>
 
-                <TodoList todos={todoData}/>
+                <TodoList
+                    onDeleted={this.deleteElement}
+                    todos={this.state.todoData}
+                />
             </div>
         );
     }

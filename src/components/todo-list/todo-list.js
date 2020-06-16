@@ -8,8 +8,12 @@ export default class TodoList extends React.Component {
         const elements = this.props.todos.map((item) => {
             const {id, ...itemProps} = item;
             return (
-                <li key={id} className="list-group-item">
-                    <TodoListItem {...itemProps} />
+                <li key={id}
+                    className="list-group-item">
+                    <TodoListItem
+                        {...itemProps}
+                        onDeleted={() => this.props.onDeleted(id)}
+                    />
                 </li>
             );
         });

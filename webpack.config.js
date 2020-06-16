@@ -29,6 +29,9 @@ module.exports = {
                                     }
                                 ],
                                 ["@babel/preset-react"]
+                            ],
+                            plugins: [
+                                "@babel/plugin-proposal-class-properties"
                             ]
                         }
                     }
@@ -40,6 +43,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: "public/index.html"
         }),
+
     ],
     devServer: {
         open: true
