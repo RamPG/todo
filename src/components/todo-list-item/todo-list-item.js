@@ -4,33 +4,14 @@ import './todo-list-item.css';
 
 export default class TodoListItem extends React.Component {
 
-    state = {
-        done: false,
-        important: this.props.important
-    }
-    strikeOut = () => {
-        this.setState((prevState) => {
-            return {
-                done: !prevState.done
-            }
-        })
-    }
-    highlightImportant = () => {
-        this.setState((prevState) => {
-            return {
-                important: !prevState.important
-            }
-        })
-    }
-
     render() {
         const label = this.props.label;
         let itemClass = "todo-list-item";
         const style = {
-            color: this.state.important ? 'steelblue' : 'black',
-            fontWeight: this.state.important ? 'bold' : 'normal'
+            color: this.props.important ? 'steelblue' : 'black',
+            fontWeight: this.props.important ? 'bold' : 'normal'
         };
-        if (this.state.done) {
+        if (this.props.done) {
             itemClass += " done";
         }
         return (
@@ -38,12 +19,12 @@ export default class TodoListItem extends React.Component {
               <span
                   className="todo-list-item-label"
                   style={style}
-                  onClick={this.strikeOut}>
+                  onClick={this.props.onToggleDone}>
                 {label}
               </span>
 
               <button type="button"
-                      onClick={this.highlightImportant}
+                      onClick={this.props.onToggleImportant}
                       className="btn btn-outline-success btn-sm float-right">
                 <i className="fa fa-exclamation"/>
               </button>

@@ -9,14 +9,24 @@ import ItemAddForm from "../item-add-form";
 import './app.css';
 
 export default class App extends React.Component {
+    maxId = 1;
     state = {
         todoData: [
-            {label: 'Drink Coffee', important: false, id: 1},
-            {label: 'Make Awesome App', important: true, id: 2},
-            {label: 'Have a lunch', important: false, id: 3}
+            this.createTodoItem("Drink Coffee"),
+            this.createTodoItem("Make Awesome App"),
+            this.createTodoItem("Have a lunch")
         ]
     }
-    maxId = this.state.todoData.length;
+
+    createTodoItem(label) {
+        return {
+            label,
+            important: false,
+            done: false,
+            id: this.maxId++
+        }
+    }
+
     deleteItem = (id) => {
         const newArray = this.state.todoData.filter((item) => item.id !== id)
         this.setState(() => {
@@ -26,23 +36,44 @@ export default class App extends React.Component {
         })
     }
     addItem = (text) => {
-        const newArray = this.state.todoData;
-        newArray.push({
-            label: text,
-            important: false,
-            id: ++this.maxId
-        })
-        this.setState(() => {
+        const newTodoItem = this.createTodoItem(text)
+        this.setState((prevState) => {
             return {
-                todoData: newArray
+                todoData: [...prevState.todoData, newTodoItem]
+            }
+        });
+    }
+    toggleElement = (prevState, id, key) => {
+        const index = prevState.todoData.findIndex((item) => item.id === id);
+        const oldItem = prevState.todoData[index];
+        const newItem = {...oldItem, [key]: !oldItem[key]};
+        return [
+            ...prevState.todoData.slice(0, index),
+            newItem,
+            ...prevState.todoData.slice(index + 1)
+        ];
+    }
+    toggleImportant = (id) => {
+        this.setState((prevState) => {
+            return {
+                todoData: this.toggleElement(prevState, id, "important")
+            }
+        })
+    }
+    toggleDone = (id) => {
+        this.setState((prevState) => {
+            return {
+                todoData: this.toggleElement(prevState, id, "done")
             }
         })
     }
 
     render() {
+        const doneCount = this.state.todoData.filter((item) => item.done).length;
+        const activeCount = this.state.todoData.length - doneCount;
         return (
             <div className="todo-app">
-                <AppHeader toDo={1} done={3}/>
+                <AppHeader toDo={activeCount} done={doneCount}/>
                 <div className="top-panel d-flex">
                     <SearchPanel/>
                     <ItemStatusFilter/>
@@ -50,6 +81,8 @@ export default class App extends React.Component {
 
                 <TodoList
                     onDeleted={this.deleteItem}
+                    onToggleImportant={this.toggleImportant}
+                    onToggleDone={this.toggleDone}
                     todos={this.state.todoData}
                 />
                 <ItemAddForm

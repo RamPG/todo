@@ -13,6 +13,8 @@ export default class TodoList extends React.Component {
                     <TodoListItem
                         {...itemProps}
                         onDeleted={() => this.props.onDeleted(id)}
+                        onToggleImportant={() => this.props.onToggleImportant(id)}
+                        onToggleDone={() => this.props.onToggleDone(id)}
                     />
                 </li>
             );
