@@ -28,11 +28,9 @@ export default class App extends React.Component {
         }
     }
 
-    updateTerm = (text) => {
-        this.setState({
-            term: text
-        })
-    }
+    onSearchChange = (search) => {
+        this.setState({term: search} );
+    };
     deleteItem = (id) => {
         const newArray = this.state.todoData.filter((item) => item.id !== id)
         this.setState(() => {
@@ -74,7 +72,7 @@ export default class App extends React.Component {
         })
     }
 
-    searchItems = (items, search) => {
+    searchItems(items, search) {
         if (search.length === 0) {
             return items;
         }
@@ -84,7 +82,7 @@ export default class App extends React.Component {
     }
 
     render() {
-        const items = this.searchItems(this.state.todoData, this.state.term)
+        const items = this.searchItems(this.state.todoData, this.state.term);
         const doneCount = this.state.todoData.filter((item) => item.done).length;
         const activeCount = this.state.todoData.length - doneCount;
         return (
@@ -92,7 +90,7 @@ export default class App extends React.Component {
                 <AppHeader toDo={activeCount} done={doneCount}/>
                 <div className="top-panel d-flex">
                     <SearchPanel
-                        onSearch={this.updateTerm}
+                        onSearchChange={this.onSearchChange}
                     />
                     <ItemStatusFilter/>
                 </div>
