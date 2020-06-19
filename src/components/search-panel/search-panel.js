@@ -16,7 +16,6 @@ export default class SearchPanel extends Component {
         this.setState({
             term: e.target.value
         });
-
         onSearchChange(e.target.value);
     };
 

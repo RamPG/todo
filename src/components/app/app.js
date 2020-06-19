@@ -16,7 +16,8 @@ export default class App extends React.Component {
             this.createTodoItem("Make Awesome App"),
             this.createTodoItem("Have a lunch")
         ],
-        term: ""
+        term: "",
+        filter: "active"
     }
 
     createTodoItem(label) {
@@ -29,7 +30,7 @@ export default class App extends React.Component {
     }
 
     onSearchChange = (search) => {
-        this.setState({term: search} );
+        this.setState({term: search});
     };
     deleteItem = (id) => {
         const newArray = this.state.todoData.filter((item) => item.id !== id)
@@ -81,8 +82,21 @@ export default class App extends React.Component {
         });
     }
 
+    onFilterChange = (filter) => {
+        this.setState({filter: filter})
+    }
+    filterItems(items, filter) {
+        if (filter === "active")
+            return items.filter((item) => !item.done)
+        else
+            if (filter === "done")
+                return items.filter((item) => item.done)
+            else
+                return items
+    }
+
     render() {
-        const items = this.searchItems(this.state.todoData, this.state.term);
+        const items = this.filterItems(this.searchItems(this.state.todoData, this.state.term), this.state.filter);
         const doneCount = this.state.todoData.filter((item) => item.done).length;
         const activeCount = this.state.todoData.length - doneCount;
         return (
@@ -92,7 +106,10 @@ export default class App extends React.Component {
                     <SearchPanel
                         onSearchChange={this.onSearchChange}
                     />
-                    <ItemStatusFilter/>
+                    <ItemStatusFilter
+                        filter={this.state.filter}
+                        onFilterChange={this.onFilterChange}
+                    />
                 </div>
                 <TodoList
                     onDeleted={this.deleteItem}
